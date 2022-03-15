@@ -29,6 +29,10 @@ public class Expense
     private Date expensedate;
 
 
-    private String currency;}
+    private String currency;
+
+
+
+}
 
 

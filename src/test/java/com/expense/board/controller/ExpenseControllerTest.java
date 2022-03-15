@@ -1,6 +1,8 @@
 package com.expense.board.controller;
 
 import com.expense.board.controller.ExpenseController;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.expense.board.model.Expense;
 import com.expense.board.repository.ExpenseRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -21,6 +24,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @WebMvcTest(ExpenseController.class)
 public class ExpenseControllerTest
@@ -83,6 +87,23 @@ public class ExpenseControllerTest
 
 
 
+    }
+    @Test
+    public void createRecord_success() throws Exception {
+        Expense record3=new Expense(1L,"Bussiness Trip to Canada","Travel",20000L,new Date(22-02-27),"USD");
+
+        Mockito.when(expenseRepo.save(Mockito.any(Expense.class))).thenReturn(record3);
+        //String content=objectWriter.writeValueAsString(records);
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/v1/expenses")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(this.objectmapper.writeValueAsString(record3));
+
+        mockMvc.perform(mockRequest)
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.category",Matchers.is("Travel")));
+        //.andExpect(jsonPath("$[0].firstName",is("John Doe")));
     }
 
     @Test
