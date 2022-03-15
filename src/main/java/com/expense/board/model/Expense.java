@@ -7,10 +7,12 @@ import lombok.*;
 //import javax.persistence.ManyToOne;
 //import javax.persistence.Table;
 import java.time.Instant;
+import java.util.Date;
+
 import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
 import org.springframework.data.annotation.Id;
 
-@Entity(name="expense")
+@Entity(name="expenses")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -21,8 +23,12 @@ public class Expense
 {
     @Id
     private Long id;
-    private Instant expensedate;
     private String descript;
     private String category;
+    private Long amount;
+    private Date expensedate;
 
-}
+
+    private String currency;}
+
+
